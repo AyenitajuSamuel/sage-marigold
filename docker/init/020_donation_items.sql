@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS donation_items (
   images TEXT[] DEFAULT '{}',
   status VARCHAR(50) DEFAULT 'available' CHECK (status IN ('available', 'reserved', 'claimed', 'withdrawn')),
   donor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  claim_code VARCHAR(6),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );
@@ -20,3 +21,5 @@ CREATE INDEX IF NOT EXISTS idx_donation_items_status ON donation_items(status);
 
 -- Add an index for donor_id lookups
 CREATE INDEX IF NOT EXISTS idx_donation_items_donor ON donation_items(donor_id);
+
+CREATE INDEX IF NOT EXISTS idx_donation_items_claim_code ON donation_items(claim_code);

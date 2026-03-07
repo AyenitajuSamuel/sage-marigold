@@ -66,7 +66,7 @@ const SignInForm = ({ onSwitch }) => {
     setLoading(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        'api/auth/login',
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -76,6 +76,7 @@ const SignInForm = ({ onSwitch }) => {
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Login failed");
       localStorage.setItem("token", result.token);
+      localStorage.setItem("user", JSON.stringify(result.user));
       navigate("/");
     } catch (err) {
       setError(err.message);
@@ -242,7 +243,7 @@ const SignUpForm = ({ onSwitch }) => {
     setLoading(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
+        'api/auth/register',
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -252,6 +253,7 @@ const SignUpForm = ({ onSwitch }) => {
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Sign up failed");
       localStorage.setItem("token", result.token);
+      localStorage.setItem("user", JSON.stringify(result.user));
       navigate("/");
     } catch (err) {
       alert(err.message);

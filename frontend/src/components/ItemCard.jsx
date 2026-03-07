@@ -1,7 +1,9 @@
 import { FaBoxOpen, FaCalendar } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import ConfirmationHandshake from "./ConfirmationHandshake";
 
 const ItemCard = ({
+  id,
   title,
   description,
   condition,
@@ -10,7 +12,11 @@ const ItemCard = ({
   images,
   image,
   category,
+  status,
+  isRequester,
+  requestId,
   onRequest,
+  onStatusUpdate,
 }) => {
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -67,14 +73,27 @@ const ItemCard = ({
         </div>
       </div>
 
-      <div className="flex items-center [.border-t]:pt-6 p-4 pt-0">
-        <button
-          onClick={onRequest}
-          className="outline-none inline-flex justify-center items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 py-2 px-4 h-9 w-full bg-emerald-700 text-white hover:bg-emerald-800"
-          type="button"
-        >
-          Request This Item
-        </button>
+      <div className="flex items-center p-4 pt-0">
+        {status === "accepted" && isRequester ? (
+          <ConfirmationHandshake 
+            requestId={requestId}
+            itemStatus={status}
+            isRequester={isRequester}
+            onStatusUpdate={onStatusUpdate}
+          />
+        ) : status === "completed" || status === "claimed" ? (
+          <button disabled className="w-full py-2 px-4 h-9 bg-gray-200 text-gray-500 rounded-md text-sm font-medium">
+            Item Claimed
+          </button>
+        ) : (
+          <button
+            onClick={onRequest}
+            className="outline-none inline-flex justify-center items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 py-2 px-4 h-9 w-full bg-emerald-700 text-white hover:bg-emerald-800"
+            type="button"
+          >
+            Request This Item
+          </button>
+        )}
       </div>
     </div>
   );

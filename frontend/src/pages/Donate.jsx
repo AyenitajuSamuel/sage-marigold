@@ -183,7 +183,7 @@ const Donate = () => {
       });
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/items`,
+        '/api/items',
         {
           method: "POST",
           headers: {
@@ -501,16 +501,7 @@ const Donate = () => {
               Pickup Location *
             </label>
             <LocationAutocomplete key={resetKey} onLocationSelect={handleLocationSelect} />
-            <input
-              id="location"
-              type="text"
-              value={formData.location}
-              onChange={handleInputChange}
-              placeholder="E.g nearest landmarks or streets"
-              className={`w-full cursor-pointer px-3 py-2 rounded-md border bg-[#f3f3f5] text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500 ${
-                errors.location ? "border-red-500" : "border-transparent"
-              }`}
-            />
+            
             <p className="text-xs text-gray-500">
               General area only. Exact address shared after confirmation.
             </p>

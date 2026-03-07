@@ -6,6 +6,8 @@ import Signup from "./pages/SignUp";
 import Footer from "./components/Footer";
 import Explore from "./pages/Explore";
 import Donate from "./pages/Donate";
+import UserDashboard from "./pages/UserDashboard";
+
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
 
@@ -31,6 +33,7 @@ function App() {
 
           <Route path="/explore" element={<Explore />} />
           <Route path="/donate" element={<ProtectedRoute element={<Donate />} />} />
+          <Route path="/dashboard" element={<ProtectedRoute element={<UserDashboard />} />} />
 
           <Route path="/about" element={<About />} />
           <Route path="/signup" element={<Signup />} />

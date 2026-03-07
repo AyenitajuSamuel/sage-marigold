@@ -11,6 +11,7 @@ const {
   getItemRequests,
   acceptRequest,
   cancelRequest,
+  claimItem
 } = require('../controllers/requestController');
 
 // POST /api/requests
@@ -50,5 +51,7 @@ router.patch(
   [validateJWT, ...validateUUID('request_id')],
   cancelRequest
 );
+router.patch('/:request_id/accept', validateJWT, acceptRequest);
+router.patch('/:request_id/claim', validateJWT, claimItem);
 
 module.exports = router;

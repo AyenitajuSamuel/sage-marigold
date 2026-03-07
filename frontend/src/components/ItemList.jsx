@@ -27,8 +27,66 @@ const ItemList = () => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/signup");
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+  const handleNearMeClick = () => {
+    setIsGeoLoading(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setUserCoords({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          });
+          setIsGeoLoading(false);
+        },
+        (geoError) => {
+          console.error("Geolocation error: ", geoError);
+          alert("Could not get your location. Please check your browser permissions (^_^)");
+          setIsGeoLoading(false);
+        }
+      );
+    }
+    else {
+      alert("Geolocation is not supported by your browser :( ");
+      setIsGeoLoading(false);
     }
 
+  };
+
+  const handleRequest = async (itemId) => {
+    const token = localStorage.getItem("token");
+    console.log("token being sent:", token);
+    if (!token) {
+      alert("You are not logged in properly. please log out and back in (^_^)");
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/requests', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },  
+        body: JSON.stringify({
+          item_id: itemId,
+          application_data: { message: "I would like to request this item, please!" }
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        alert("Request sent successfully!");
+        window.location.reload();
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error("Request Error:", err);
+      alert("Failed to send request.");
+    }
   };
 
   useEffect(() => {
@@ -56,7 +114,7 @@ const ItemList = () => {
 
 
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/items/available?${params.toString()}`,
+          `/api/items/available?${params.toString()}`,
         );
         const data = await response.json();
 
@@ -138,7 +196,7 @@ const ItemList = () => {
             <button
               type="button"
               onClick={(e) => {
-                e.stopPropagation(); 
+                e.stopPropagation();
                 setUserCoords(null);
               }}
               className="ml-2 bg-emerald-200 hover:bg-emerald-300 text-emerald-800 rounded-full w-5 h-5 flex items-center justify-center text-xs transition-colors"
@@ -180,8 +238,15 @@ const ItemList = () => {
               <SkeletonCard key={index} />
             ))
             : donations.map((donation) => (
-                <ItemCard key={donation.id} {...donation} onRequest={handleRequest} />
-              ))}
+              <ItemCard
+                key={donation.id}
+                {...donation}
+                isRequester={currentUser?.id === donation.requester_id}
+                requestId={donation.active_request_id}
+                onStatusUpdate={() => window.location.reload()}
+                onRequest={() => handleRequest(donation.id)}
+              />
+            ))}
         </div>
       )}
     </>

@@ -2,13 +2,17 @@ const { response } = require('express');
 const jwt = require('jsonwebtoken');
 
 const validateJWT = (req, res = response, next) => {
-  const token = req.header('x-token');
+  let token = req.header('Authorization') || req.header('x-token');
 
   if (!token) {
     return res.status(401).json({
       ok: false,
       msg: 'No token provided',
     });
+  }
+
+  if (token.startsWith('Bearer ')) {
+    token = token.split(' ')[1];
   }
 
   try {

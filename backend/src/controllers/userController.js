@@ -40,8 +40,9 @@ const getUserActivity = async (req, res = response) => {
         message: 'User account not found or deleted',
       });
     }
+
     const donationsResult = await db.query(
-      `SELECT id, title, status, created_at, 
+      `SELECT id, title, status, claim_code, created_at, 
       (SELECT COUNT(*)::int FROM requests r WHERE r.item_id=i.id AND r.status='pending') AS pending_request_count 
       FROM donation_items i WHERE donor_id=$1
       ORDER BY created_at DESC`,
@@ -56,10 +57,10 @@ const getUserActivity = async (req, res = response) => {
       r.status,
       r.created_at,
       CASE
-        WHEN r.status='accepted' THEN 'Request approved! Check your email for pickup details.'
-        WHEN r.status='rejected' THEN 'Thank you for your interest! This item has found a new home. Visit the Explore page to find more items nearby!'
-        WHEN r.status='cancelled' THEN 'You have cancelled this request. This item is no longer in your active list.'
-        WHEN r.status='completed' THEN 'You have successfully received this item. Thank you for being part of the community. Enjoy!'
+        WHEN r.status='accepted' THEN 'Approved! Meet the donor and ask for the 6-digit claim code.'
+        WHEN r.status='rejected' THEN 'This item has found a new home. Check Explore for more!'
+        WHEN r.status='cancelled' THEN 'Request cancelled.'
+        WHEN r.status='completed' THEN 'Item successfully received! Enjoy your new treasure. (^_^)'
         ELSE 'Waiting for donor response...'
       END AS status_message, 
       u.full_name AS donor_name,
@@ -70,7 +71,7 @@ const getUserActivity = async (req, res = response) => {
       FROM requests r 
       JOIN donation_items i ON r.item_id=i.id
       JOIN users u ON i.donor_id=u.id
-      WHERE requester_id=$1
+      WHERE r.requester_id=$1
       ORDER BY r.created_at DESC`,
       [currentUser_id]
     );

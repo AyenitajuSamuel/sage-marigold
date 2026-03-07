@@ -13,27 +13,26 @@ const Navbar = () => {
   };
 
   const getLinkClass = ({ isActive }) => {
-    return `hover:text-gray-600 ${
-      isActive
+    return `hover:text-gray-600 ${isActive
         ? "text-emerald-700 font-semibold border-b-2 border-emerald-700"
         : "text-black"
-    }`;
+      }`;
   };
 
   return (
     <nav className="flex justify-between sticky top-0 z-50 items-center py-4 px-8 bg-[#f5f5f5] shadow-md">
       <h1 className="text-2xl font-bold">
-        <Link
-          className="flex items-center text-emerald-700 text-xl font-cursive! hover:text-gray-600"
+        <NavLink
+          className="hidden md:inline text-emerald-700 text-xl font-cursive! hover:text-gray-600"
           to="/"
         >
           <img
             src="/project_logo.png"
             alt="Sage Marigold Logo"
-            className="h-12 w-12 mr-2"
+            className="h-12 w-12 inline mr-2"
           />
-          <span className="hidden md:inline">HELPING HANDS</span>
-        </Link>
+          HELPING HANDS
+        </NavLink>
       </h1>
 
       <button
@@ -49,6 +48,11 @@ const Navbar = () => {
       <ul className="hidden md:flex gap-6 items-center">
         {loggedIn ? (
           <>
+            <li className="hover:border-b-2 hover:border-emerald-700">
+              <NavLink to="/dashboard" className="flex items-center gap-2">
+                Dashboard
+              </NavLink>
+            </li>
             <li className="hover:border-b-2 hover:border-emerald-700">
               <NavLink to="/explore" className={getLinkClass}>
                 Explore
