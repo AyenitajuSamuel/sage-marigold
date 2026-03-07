@@ -487,7 +487,7 @@ const SignUp = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 py-12">
-      <div className="w-full max-w-4xl rounded-2xl shadow-md overflow-hidden flex">
+      <div className="w-full max-w-4xl rounded-2xl shadow-md overflow-hidden flex -mt-8">
         {/* ── Left Panel ── */}
         <div
           className="hidden md:flex flex-col bg-cover bg-center justify-between p-8 text-white relative overflow-hidden max-w-[55%]"
@@ -496,7 +496,7 @@ const SignUp = () => {
             backgroundImage: "url('/signupbg.webp')",
           }}
         >
-          <div className="absolute inset-0 bg-emerald-500/50" />
+          <div className="absolute inset-0 bg-black/60" />
 
           <div className="relative z-10 flex items-center gap-2">
             <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
