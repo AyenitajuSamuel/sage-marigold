@@ -23,12 +23,6 @@ const ItemList = () => {
 
   const navigate = useNavigate();
 
-  const handleRequest = () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/signup");
-  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-
   const handleNearMeClick = () => {
     setIsGeoLoading(true);
     if (navigator.geolocation) {
